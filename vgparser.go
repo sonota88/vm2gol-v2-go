@@ -375,7 +375,7 @@ func parseFuncall() *lib.NodeList {
 func parseCall() *lib.NodeList {
 	puts_fn("parseCall")
 
-	consumeKw("call")
+	// consumeKw("call")
 
 	funcall := parseFuncall()
 
@@ -531,8 +531,8 @@ func parseStmt() *lib.NodeList {
 
 	if t.strEq("set") {
 		return parseSet()
-	} else if t.strEq("call") {
-		return parseCall()
+	// } else if t.strEq("call") {
+	// 	return parseCall()
 	// } else if t.strEq("call_set") {
 	// 	return parseCallSet()
 	} else if t.strEq("return") {
