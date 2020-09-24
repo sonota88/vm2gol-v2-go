@@ -453,6 +453,7 @@ func parseWhenClause() *lib.NodeList {
 		return lib.NodeList_empty()
 	}
 
+	consumeKw("when")
 	consumeSym("(")
 	expr := parseExpr()
 	consumeSym(")")
