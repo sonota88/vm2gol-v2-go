@@ -458,9 +458,9 @@ func parseWhenClause() *lib.NodeList {
 	expr := parseExpr()
 	consumeSym(")")
 
-	consumeSym("{")
+	// consumeSym("{")
 	stmts := parseStmts()
-	consumeSym("}")
+	// consumeSym("}")
 
 	list := newlist()
 	list.Add(expr)
@@ -528,6 +528,12 @@ func parseStmt() *lib.NodeList {
 	t := peek(0)
 
 	if t.is("sym", "}") {
+		return nil
+	}
+	if t.is("kw", "when") {
+		return nil
+	}
+	if t.is("kw", "end") {
 		return nil
 	}
 
