@@ -14,7 +14,7 @@ func tokenize(src string) {
 	pos := 0
 
 	spaceRe := regexp.MustCompile(`^([ \n]+)`)
-	cmtRe := regexp.MustCompile(`^(//.*)`)
+	cmtRe := regexp.MustCompile(`^(#.*)`)
 	strRe := regexp.MustCompile(`^"(.*)"`)
 	kwRe := regexp.MustCompile(`^(def|end|set|var|call_set|call|return|case|while|_cmt)[^a-z]`)
 	symbolRe := regexp.MustCompile(`^(==|!=|[(){}=;+*,])`)
