@@ -434,9 +434,10 @@ func parseWhile() *lib.NodeList {
 	expr := parseExpr()
 	consumeSym(")")
 
-	consumeSym("{")
+	// consumeSym("{")
 	stmts := parseStmts()
-	consumeSym("}")
+	// consumeSym("}")
+	consumeKw("end")
 
 	stmt := newlist()
 	stmt.AddStr("while")

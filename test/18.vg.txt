@@ -1,8 +1,8 @@
-// -*- mode: javascript -*-
+# -*- mode: ruby -*-
 
-def main() {
+def main()
   var a = 0;
-  while (a == 0) {
+  while (a == 0)
     a = 1;
-  }
-}
+  end
+end
