@@ -335,7 +335,7 @@ func parseExpr() *lib.Node {
 func parseSet() *lib.NodeList {
 	puts_fn("parseSet")
 
-	consumeKw("set")
+	// consumeKw("set")
 
 	t := peek(0)
 	pos++
@@ -529,13 +529,13 @@ func parseStmt() *lib.NodeList {
 		return nil
 	}
 
-	if t.strEq("set") {
-		return parseSet()
+	// if t.strEq("set") {
+	// 	return parseSet()
 	// } else if t.strEq("call") {
 	// 	return parseCall()
 	// } else if t.strEq("call_set") {
 	// 	return parseCallSet()
-	} else if t.strEq("return") {
+    if t.strEq("return") {
 		return parseReturn()
 	} else if t.strEq("while") {
 		return parseWhile()
