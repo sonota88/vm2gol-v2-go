@@ -391,7 +391,7 @@ func parseCall() *lib.NodeList {
 func parseCallSet() *lib.NodeList {
 	puts_fn("parseCallSet")
 
-	consumeKw("call_set")
+	// consumeKw("call_set")
 
 	t := peek(0)
 	pos++
@@ -533,8 +533,8 @@ func parseStmt() *lib.NodeList {
 		return parseSet()
 	} else if t.strEq("call") {
 		return parseCall()
-	} else if t.strEq("call_set") {
-		return parseCallSet()
+	// } else if t.strEq("call_set") {
+	// 	return parseCallSet()
 	} else if t.strEq("return") {
 		return parseReturn()
 	} else if t.strEq("while") {
@@ -544,9 +544,22 @@ func parseStmt() *lib.NodeList {
 	} else if t.strEq("_cmt") {
 		return parseVmComment()
 	} else {
-		puts_kv_e("pos", pos)
-		puts_kv_e("t", t)
-		panic("Unexpected token")
+        t1 := peek(1)
+        t2 := peek(2)
+        t3 := peek(3)
+        if t.kindEq("ident") && t1.is("sym", "=") {
+            if (t2.kindEq("ident") && t3.is("sym", "(")) {
+                return parseCallSet()
+            } else {
+                return parseSet()
+            }
+        } else if t.kindEq("ident") && t1.is("sym", "(") {
+            return parseCall()
+        } else {
+			puts_kv_e("pos", pos)
+			puts_kv_e("t", t)
+			panic("Unexpected token")
+        }
 	}
 }
 
