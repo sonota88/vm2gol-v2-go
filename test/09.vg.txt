@@ -1,8 +1,8 @@
 // -*- mode: javascript -*-
 
-func sub(a) {
+def sub(a) {
 }
 
-func main() {
+def main() {
   sub(1);
 }

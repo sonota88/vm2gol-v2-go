@@ -1,12 +1,12 @@
 // -*- mode: javascript -*-
 
-func add(a, b) {
+def add(a, b) {
   var c;
   c = a + b;
   return c;
 }
 
-func main() {
+def main() {
   var c;
   c = add(1, 2);
 }

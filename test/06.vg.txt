@@ -1,5 +1,5 @@
 // -*- mode: javascript -*-
 
-func main() {
+def main() {
   _cmt("vm comment");
 }

@@ -1,6 +1,6 @@
 // -*- mode: javascript -*-
 
-func sub(a) {
+def sub(a) {
   // 関数の引数をローカル変数に代入
   var b;
   b = a;
@@ -10,6 +10,6 @@ func sub(a) {
   c = b;
 }
 
-func main() {
+def main() {
   sub(1);
 }

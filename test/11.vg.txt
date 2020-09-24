@@ -1,6 +1,6 @@
 // -*- mode: javascript -*-
 
-func main() {
+def main() {
   var a;
   a = 1 + 2;
 }

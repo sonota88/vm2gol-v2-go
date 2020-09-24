@@ -1,6 +1,6 @@
 // -*- mode: javascript -*-
 
-func main() {
+def main() {
   // *, neq
   var a;
   a = 2 * 3;

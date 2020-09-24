@@ -176,7 +176,7 @@ func parseArgs() *lib.NodeList {
 func parseFunc() *lib.NodeList {
 	puts_fn("parseFunc")
 
-	consumeKw("func")
+	consumeKw("def")
 
 	fnName := peek(0).str
 	pos++
@@ -580,7 +580,7 @@ func parseStmts() *lib.NodeList {
 func parseTopStmt() *lib.NodeList {
 	t := tokens[pos]
 
-	if t.str == "func" {
+	if t.str == "def" {
 		return parseFunc()
 	} else {
 		panic(

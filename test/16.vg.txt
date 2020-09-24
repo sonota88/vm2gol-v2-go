@@ -1,5 +1,5 @@
 // -*- mode: javascript -*-
 
-func main() {
+def main() {
   var a = (2 + 3);
 }
