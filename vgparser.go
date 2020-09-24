@@ -449,7 +449,7 @@ func parseWhenClause() *lib.NodeList {
 	// puts_fn("parseWhenClause")
 
 	t := peek(0)
-	if t.is("sym", "}") {
+	if t.is("kw", "end") {
 		return lib.NodeList_empty()
 	}
 
@@ -476,7 +476,7 @@ func parseCase() *lib.NodeList {
 
 	consumeKw("case")
 
-	consumeSym("{")
+	// consumeSym("{")
 
 	whenClauses := newlist()
 
@@ -488,7 +488,8 @@ func parseCase() *lib.NodeList {
 		whenClauses.AddList(whenClause)
 	}
 
-	consumeSym("}")
+	// consumeSym("}")
+	consumeKw("end")
 
 	stmt := newlist()
 	stmt.AddStr("case")

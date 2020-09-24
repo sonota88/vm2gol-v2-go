@@ -1,13 +1,13 @@
-// -*- mode: javascript -*-
+# -*- mode: ruby -*-
 
-def main() {
+def main()
   var a = 0;
-  case {
+  case
     (a == 1) {
       a = 0;
     }
     (a == 0) {
       a = 1;
     }
-  }
-}
+  end
+end
