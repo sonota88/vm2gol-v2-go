@@ -185,12 +185,12 @@ func parseFunc() *lib.NodeList {
 	args := parseArgs()
 	consumeSym(")")
 
-	consumeSym("{")
+	// consumeSym("{")
 
 	stmts := newlist()
 	for {
 		t := peek(0)
-		if t.str == "}" {
+		if t.str == "end" {
 			break
 		}
 
@@ -201,7 +201,7 @@ func parseFunc() *lib.NodeList {
 		}
 	}
 
-	consumeSym("}")
+	consumeKw("end")
 
 	stmt := newlist()
 	stmt.AddStr("func")
