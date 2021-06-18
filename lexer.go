@@ -10,13 +10,24 @@ func putsToken(kind string, str string) {
 	fmt.Printf("%s:%s\n", kind, str)
 }
 
+func isKw(str string) bool {
+	return str == "func" ||
+		str == "set" ||
+		str == "var" ||
+		str == "call_set" ||
+		str == "call" ||
+		str == "return" ||
+		str == "case" ||
+		str == "while" ||
+		str == "_cmt"
+}
+
 func tokenize(src string) {
 	pos := 0
 
 	spaceRe := regexp.MustCompile(`^([ \n]+)`)
 	cmtRe := regexp.MustCompile(`^(//.*)`)
 	strRe := regexp.MustCompile(`^"(.*)"`)
-	kwRe := regexp.MustCompile(`^(func|set|var|call_set|call|return|case|while|_cmt)[^a-z]`)
 	symbolRe := regexp.MustCompile(`^(==|!=|[(){}=;+*,])`)
 	intRe := regexp.MustCompile(`^(-?[0-9]+)`)
 	identRe := regexp.MustCompile(`^([a-z_][a-z0-9_\[\]]*)`)
@@ -40,12 +51,6 @@ func tokenize(src string) {
 			putsToken("str", temp)
 			pos += len(temp) + 2
 
-		} else if kwRe.MatchString(rest) {
-			m := kwRe.FindStringSubmatch(rest)
-			temp := m[1]
-			putsToken("kw", temp)
-			pos += len(temp)
-
 		} else if intRe.MatchString(rest) {
 			m := intRe.FindStringSubmatch(rest)
 			temp := m[1]
@@ -61,7 +66,11 @@ func tokenize(src string) {
 		} else if identRe.MatchString(rest) {
 			m := identRe.FindStringSubmatch(rest)
 			temp := m[1]
-			putsToken("ident", temp)
+			if isKw(temp) {
+				putsToken("kw", temp)
+			} else {
+				putsToken("ident", temp)
+			}
 			pos += len(temp)
 
 		} else {
