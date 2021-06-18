@@ -119,7 +119,7 @@ func codegenExprPush(
 			panic("not_yet_impl")
 		}
 	} else if val.KindEq("list") {
-		codegenExpr(fnArgNames, lvarNames, val.List)
+		_codegenExprBinop(fnArgNames, lvarNames, val.List)
 		pushArg = "reg_a"
 	} else {
 		puts_kv_e("val", val)
@@ -181,12 +181,12 @@ func codegenExprNeq() {
 	fmt.Printf("label %s\n", endLabel)
 }
 
-func codegenExpr(
+func _codegenExprBinop(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	expr *lib.NodeList,
 ) {
-	puts_fn("codegenExpr")
+	puts_fn("_codegenExprBinop")
 
 	op := head(expr).Strval
 	args := rest(expr)
@@ -281,7 +281,7 @@ func codegenSet(
 	argSrc := toAsmArg(fnArgNames, lvarNames, expr)
 	if argSrc == "" {
 		if expr.KindEq("list") {
-			codegenExpr(fnArgNames, lvarNames, expr.List)
+			_codegenExprBinop(fnArgNames, lvarNames, expr.List)
 			argSrc = "reg_a"
 		} else if expr.KindEq("str") {
 
@@ -401,7 +401,7 @@ func codegenWhile(
 
 	fmt.Printf("label %s\n", labelBegin)
 
-	codegenExpr(fnArgNames, lvarNames, condExpr)
+	_codegenExprBinop(fnArgNames, lvarNames, condExpr)
 
 	fmt.Printf("  set_reg_b 1\n")
 	fmt.Printf("  compare\n")
@@ -449,7 +449,7 @@ func codegenCase(
 
 		if condHead == "eq" {
 			fmt.Printf("  # -->> expr\n")
-			codegenExpr(fnArgNames, lvarNames, cond)
+			_codegenExprBinop(fnArgNames, lvarNames, cond)
 			fmt.Printf("  # <<-- expr\n")
 
 			fmt.Printf("  set_reg_b 1\n")
