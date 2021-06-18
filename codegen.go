@@ -105,28 +105,25 @@ func codegenExprPush(
 	lvarNames *lib.Names,
 	val *lib.Node,
 ) {
-	pushArg := ""
-
 	if val.KindEq("int") {
-		pushArg = fmt.Sprintf("%d", val.Intval)
+		fmt.Printf("  cp %d reg_a\n", val.Intval)
 	} else if val.KindEq("str") {
+		cpSrc := ""
 		str := val.Strval
 		if 0 <= lvarNames.IndexOf(str) {
-			pushArg = toLvarRef(lvarNames, str)
+			cpSrc = toLvarRef(lvarNames, str)
 		} else if 0 <= fnArgNames.IndexOf(str) {
-			pushArg = toFnArgRef(fnArgNames, str)
+			cpSrc = toFnArgRef(fnArgNames, str)
 		} else {
 			panic("not_yet_impl")
 		}
+		fmt.Printf("  cp %s reg_a\n", cpSrc)
 	} else if val.KindEq("list") {
 		_codegenExprBinop(fnArgNames, lvarNames, val.List)
-		pushArg = "reg_a"
 	} else {
 		puts_kv_e("val", val)
 		panic("not_yet_impl")
 	}
-
-	fmt.Printf("  push %s\n", pushArg)
 }
 
 func codegenExprAdd() {
@@ -195,7 +192,9 @@ func _codegenExprBinop(
 	termR := args.Get(1)
 
 	codegenExprPush(fnArgNames, lvarNames, termL)
+	fmt.Printf("  push reg_a\n")
 	codegenExprPush(fnArgNames, lvarNames, termR)
+	fmt.Printf("  push reg_a\n")
 
 	if op == "+" {
 		codegenExprAdd()
