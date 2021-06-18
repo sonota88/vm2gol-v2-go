@@ -11,7 +11,7 @@ print_project_dir() {
 export PROJECT_DIR="$(print_project_dir)"
 export TEST_DIR="${PROJECT_DIR}/test"
 export TEMP_DIR="${PROJECT_DIR}/z_tmp"
-EXE_FILE=${PROJECT_DIR}/bin/app
+EXE_FILE=./bin/app
 
 MAX_ID_JSON=6
 MAX_ID_TOKENIZE=2
@@ -52,7 +52,7 @@ setup() {
 }
 
 build() {
-  go build -o $EXE_FILE
+  ./docker_go.sh build -o $EXE_FILE
   if [ $? -ne 0 ]; then
     exit 1
   fi
