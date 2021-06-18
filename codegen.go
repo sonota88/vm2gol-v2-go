@@ -35,7 +35,7 @@ func toFnArgRef(names *lib.Names, name string) string {
 	if i == -1 {
 		panic("fn arg not found")
 	}
-	return fmt.Sprintf("[bp+%d]", i+2)
+	return fmt.Sprintf("[bp:%d]", i+2)
 }
 
 func toLvarRef(names *lib.Names, name string) string {
