@@ -43,7 +43,7 @@ func toLvarRef(names *lib.Names, name string) string {
 	if i == -1 {
 		panic("lvar not found")
 	}
-	return fmt.Sprintf("[bp-%d]", i+1)
+	return fmt.Sprintf("[bp:%d]", -(i + 1))
 }
 
 func toAsmArg(
