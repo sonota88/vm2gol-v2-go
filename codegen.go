@@ -105,15 +105,25 @@ func codegenExprPush(
 	lvarNames *lib.Names,
 	val *lib.Node,
 ) {
-	pushArg := toAsmArg(fnArgNames, lvarNames, val)
-	if pushArg == "" {
-		if val.KindEq("list") {
-			codegenExpr(fnArgNames, lvarNames, val.List)
-			pushArg = "reg_a"
+	pushArg := ""
+
+	if val.KindEq("int") {
+		pushArg = fmt.Sprintf("%d", val.Intval)
+	} else if val.KindEq("str") {
+		str := val.Strval
+		if 0 <= lvarNames.IndexOf(str) {
+			pushArg = toLvarRef(lvarNames, str)
+		} else if 0 <= fnArgNames.IndexOf(str) {
+			pushArg = toFnArgRef(fnArgNames, str)
 		} else {
-			puts_kv_e("val", val)
 			panic("not_yet_impl")
 		}
+	} else if val.KindEq("list") {
+		codegenExpr(fnArgNames, lvarNames, val.List)
+		pushArg = "reg_a"
+	} else {
+		puts_kv_e("val", val)
+		panic("not_yet_impl")
 	}
 
 	fmt.Printf("  push %s\n", pushArg)
