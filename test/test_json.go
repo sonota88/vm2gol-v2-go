@@ -1,7 +1,7 @@
 package test
 
 import (
-	lib "../lib"
+	"github.com/sonota88/vm2gol-v2-go/lib"
 )
 
 func make_test_json_data_1() *lib.NodeList {

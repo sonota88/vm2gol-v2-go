@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./lib"
 	"fmt"
+	"github.com/sonota88/vm2gol-v2-go/lib"
 	"regexp"
 	"strings"
 )
