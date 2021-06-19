@@ -289,7 +289,7 @@ func codegenWhile(
 func codegenCase(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	whenBlocks *lib.NodeList,
+	whenClauses *lib.NodeList,
 ) {
 	puts_fn("codegenCase")
 
@@ -303,12 +303,12 @@ func codegenCase(
 	fmt.Printf("\n")
 	fmt.Printf("  # -->> case_%d\n", labelId)
 
-	for i := 0; i < whenBlocks.Len(); i++ {
-		whenBlock := whenBlocks.Get(i).List
+	for i := 0; i < whenClauses.Len(); i++ {
+		whenClause := whenClauses.Get(i).List
 		whenIdx++
 
-		cond := head(whenBlock)
-		_rest := rest(whenBlock)
+		cond := head(whenClause)
+		_rest := rest(whenClause)
 
 		fmt.Printf("  # when_%d_%d\n", labelId, whenIdx)
 
