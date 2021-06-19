@@ -209,18 +209,6 @@ func codegenExpr(
 	}
 }
 
-func codegenCallPushFnArg(
-	fnArgNames *lib.Names,
-	lvarNames *lib.Names,
-	fnArg *lib.Node,
-) {
-	pushArg := toAsmArg(fnArgNames, lvarNames, fnArg)
-	if pushArg == "" {
-		panic("not yet impl")
-	}
-	fmt.Printf("  cp %s reg_a\n", pushArg)
-}
-
 func codegenCall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
@@ -231,7 +219,7 @@ func codegenCall(
 
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
-		codegenCallPushFnArg(fnArgNames, lvarNames, fnArg)
+		codegenExpr(fnArgNames, lvarNames, fnArg)
 		fmt.Printf("  push reg_a\n")
 	}
 
@@ -256,7 +244,7 @@ func codegenCallSet(
 
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
-		codegenCallPushFnArg(fnArgNames, lvarNames, fnArg)
+		codegenExpr(fnArgNames, lvarNames, fnArg)
 		fmt.Printf("  push reg_a\n")
 	}
 
