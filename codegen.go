@@ -210,6 +210,18 @@ func _codegenExprBinop(
 	}
 }
 
+func codegenExpr(
+	fnArgNames *lib.Names,
+	lvarNames *lib.Names,
+	expr *lib.Node,
+) {
+	if expr.KindEq("list") {
+		_codegenExprBinop(fnArgNames, lvarNames, expr.List)
+	} else {
+		panic("not_yet_impl")
+	}
+}
+
 func codegenCallPushFnArg(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
