@@ -37,12 +37,12 @@ func toFnArgDisp(names *lib.Names, name string) int {
 	return i + 2
 }
 
-func toLvarRef(names *lib.Names, name string) string {
+func toLvarDisp(names *lib.Names, name string) int {
 	i := names.IndexOf(name)
 	if i == -1 {
 		panic("lvar not found")
 	}
-	return fmt.Sprintf("[bp:%d]", -(i + 1))
+	return -(i + 1)
 }
 
 // --------------------------------
@@ -153,8 +153,8 @@ func genExpr(
 	} else if expr.KindEq("str") {
 		str := expr.Strval
 		if 0 <= lvarNames.IndexOf(str) {
-			cpSrc := toLvarRef(lvarNames, str)
-			fmt.Printf("  cp %s reg_a\n", cpSrc)
+			disp := toLvarDisp(lvarNames, str)
+			fmt.Printf("  cp [bp:%d] reg_a\n", disp)
 		} else if 0 <= fnArgNames.IndexOf(str) {
 			disp := toFnArgDisp(fnArgNames, str)
 			fmt.Printf("  cp [bp:%d] reg_a\n", disp)
@@ -200,8 +200,8 @@ func genCallSet(
 
 	genCall(fnArgNames, lvarNames, funcall)
 
-	dest := toLvarRef(lvarNames, lvarName)
-	fmt.Printf("  cp reg_a %s\n", dest)
+	disp := toLvarDisp(lvarNames, lvarName)
+	fmt.Printf("  cp reg_a [bp:%d]\n", disp)
 }
 
 func genSet(
@@ -217,8 +217,8 @@ func genSet(
 
 	if dest.KindEq("str") {
 		if 0 <= lvarNames.IndexOf(dest.Strval) {
-			cpDest := toLvarRef(lvarNames, dest.Strval)
-			fmt.Printf("  cp reg_a %s\n", cpDest)
+			disp := toLvarDisp(lvarNames, dest.Strval)
+			fmt.Printf("  cp reg_a [bp:%d]\n", disp)
 		} else {
 			panic("not_yet_impl")
 		}
