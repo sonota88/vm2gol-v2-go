@@ -125,49 +125,20 @@ func parseArg() *lib.Node {
 	}
 }
 
-func parseArgsFirst() *lib.Node {
-	// puts_fn("parseArgsFirst")
-
-	t := peek(0)
-
-	if t.is("sym", ")") {
-		return lib.Node_newNil()
-	}
-
-	return parseArg()
-}
-
-func parseArgsRest() *lib.Node {
-	// puts_fn("parseArgsRest")
-
-	t := peek(0)
-
-	if t.is("sym", ")") {
-		return lib.Node_newNil()
-	}
-
-	consumeSym(",")
-
-	return parseArg()
-}
-
 func parseArgs() *lib.NodeList {
 	puts_fn("parseArgs")
 
 	args := newlist()
 
-	firstArg := parseArgsFirst()
-	if firstArg.KindEq("nil") {
+	if peek(0).str == ")" {
 		return args
+	} else {
+		args.Add(parseArg())
 	}
-	args.Add(firstArg)
 
-	for {
-		restArg := parseArgsRest()
-		if restArg.KindEq("nil") {
-			break
-		}
-		args.Add(restArg)
+	for peek(0).str == "," {
+		consumeSym(",")
+		args.Add(parseArg())
 	}
 
 	return args
