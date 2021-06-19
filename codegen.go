@@ -203,8 +203,8 @@ func codegenExpr(
 func _codegenFuncall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-    fnName string,
-    fnArgs *lib.NodeList,
+	fnName string,
+	fnArgs *lib.NodeList,
 ) {
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
@@ -225,7 +225,7 @@ func codegenCall(
 ) {
 	fnName := head(stmtRest).Strval
 	fnArgs := rest(stmtRest)
-    _codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
+	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
 }
 
 func codegenCallSet(
@@ -241,7 +241,7 @@ func codegenCallSet(
 	fnName := head(fnTemp).Strval
 	fnArgs := rest(fnTemp)
 
-    _codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
+	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
 
 	dest := toLvarRef(lvarNames, lvarName)
 	fmt.Printf("  cp reg_a %s\n", dest)
@@ -485,7 +485,7 @@ func codegenBuiltinSetVram() {
 	fmt.Println("  push bp")
 	fmt.Println("  cp sp bp")
 
-	fmt.Println("  set_vram [bp:2] [bp:3]")
+	fmt.Println("  set_vram [bp:2] [bp:3]") // vram_addr value
 
 	fmt.Println("  cp bp sp")
 	fmt.Println("  pop bp")
@@ -501,7 +501,7 @@ func Codegen() {
 
 	codegenTopStmts(tree)
 
-    fmt.Println("#>builtins")
-    codegenBuiltinSetVram()
-    fmt.Println("#<builtins")
+	fmt.Println("#>builtins")
+	codegenBuiltinSetVram()
+	fmt.Println("#<builtins")
 }
