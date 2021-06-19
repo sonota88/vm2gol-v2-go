@@ -189,10 +189,10 @@ func _codegenFuncall(
 func codegenCall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
+	funcall *lib.NodeList,
 ) {
-	fnName := head(stmtRest).Strval
-	fnArgs := rest(stmtRest)
+	fnName := head(funcall).Strval
+	fnArgs := rest(funcall)
 	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
 }
 
@@ -204,10 +204,10 @@ func codegenCallSet(
 	puts_fn("codegenCallSet")
 
 	lvarName := stmtRest.Get(0).Strval
-	fnTemp := stmtRest.Get(1).List
+	funcall := stmtRest.Get(1).List
 
-	fnName := head(fnTemp).Strval
-	fnArgs := rest(fnTemp)
+	fnName := head(funcall).Strval
+	fnArgs := rest(funcall)
 
 	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
 
