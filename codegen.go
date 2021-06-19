@@ -47,7 +47,7 @@ func toLvarRef(names *lib.Names, name string) string {
 
 // --------------------------------
 
-func codegenVar(
+func genVar(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	stmtRest *lib.NodeList,
@@ -55,23 +55,23 @@ func codegenVar(
 	fmt.Printf("  sub_sp 1\n")
 
 	if stmtRest.Len() == 2 {
-		codegenSet(fnArgNames, lvarNames, stmtRest)
+		genSet(fnArgNames, lvarNames, stmtRest)
 	}
 }
 
-func codegenExprAdd() {
+func genExprAdd() {
 	fmt.Printf("  pop reg_b\n")
 	fmt.Printf("  pop reg_a\n")
 	fmt.Printf("  add_ab\n")
 }
 
-func codegenExprMult() {
+func genExprMult() {
 	fmt.Printf("  pop reg_b\n")
 	fmt.Printf("  pop reg_a\n")
 	fmt.Printf("  mult_ab\n")
 }
 
-func codegenExprEq() {
+func genExprEq() {
 	labelId := getLabelId()
 
 	thenLabel := fmt.Sprintf("then_%d", labelId)
@@ -91,7 +91,7 @@ func codegenExprEq() {
 	fmt.Printf("label %s\n", endLabel)
 }
 
-func codegenExprNeq() {
+func genExprNeq() {
 	labelId := getLabelId()
 
 	thenLabel := fmt.Sprintf("then_%d", labelId)
@@ -111,12 +111,12 @@ func codegenExprNeq() {
 	fmt.Printf("label %s\n", endLabel)
 }
 
-func _codegenExprBinop(
+func _genExprBinop(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	expr *lib.NodeList,
 ) {
-	puts_fn("_codegenExprBinop")
+	puts_fn("_genExprBinop")
 
 	op := head(expr).Strval
 	args := rest(expr)
@@ -124,26 +124,26 @@ func _codegenExprBinop(
 	termL := args.Get(0)
 	termR := args.Get(1)
 
-	codegenExpr(fnArgNames, lvarNames, termL)
+	genExpr(fnArgNames, lvarNames, termL)
 	fmt.Printf("  push reg_a\n")
-	codegenExpr(fnArgNames, lvarNames, termR)
+	genExpr(fnArgNames, lvarNames, termR)
 	fmt.Printf("  push reg_a\n")
 
 	if op == "+" {
-		codegenExprAdd()
+		genExprAdd()
 	} else if op == "*" {
-		codegenExprMult()
+		genExprMult()
 	} else if op == "eq" {
-		codegenExprEq()
+		genExprEq()
 	} else if op == "neq" {
-		codegenExprNeq()
+		genExprNeq()
 	} else {
 		puts_kv_e("op", op)
 		panic("not_yet_impl")
 	}
 }
 
-func codegenExpr(
+func genExpr(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	expr *lib.Node,
@@ -162,13 +162,13 @@ func codegenExpr(
 			panic("not_yet_impl")
 		}
 	} else if expr.KindEq("list") {
-		_codegenExprBinop(fnArgNames, lvarNames, expr.List)
+		_genExprBinop(fnArgNames, lvarNames, expr.List)
 	} else {
 		panic("not_yet_impl")
 	}
 }
 
-func codegenCall(
+func genCall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	funcall *lib.NodeList,
@@ -178,42 +178,42 @@ func codegenCall(
 
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
-		codegenExpr(fnArgNames, lvarNames, fnArg)
+		genExpr(fnArgNames, lvarNames, fnArg)
 		fmt.Printf("  push reg_a\n")
 	}
 
-	codegenVmComment("call  " + fnName)
+	genVmComment("call  " + fnName)
 	fmt.Printf("  call %s\n", fnName)
 
 	fmt.Printf("  add_sp %d\n", fnArgs.Len())
 }
 
-func codegenCallSet(
+func genCallSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	stmtRest *lib.NodeList,
 ) {
-	puts_fn("codegenCallSet")
+	puts_fn("genCallSet")
 
 	lvarName := stmtRest.Get(0).Strval
 	funcall := stmtRest.Get(1).List
 
-	codegenCall(fnArgNames, lvarNames, funcall)
+	genCall(fnArgNames, lvarNames, funcall)
 
 	dest := toLvarRef(lvarNames, lvarName)
 	fmt.Printf("  cp reg_a %s\n", dest)
 }
 
-func codegenSet(
+func genSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	rest *lib.NodeList,
 ) {
-	puts_fn("codegenSet")
+	puts_fn("genSet")
 	dest := rest.Get(0)
 	expr := rest.Get(1)
 
-	codegenExpr(fnArgNames, lvarNames, expr)
+	genExpr(fnArgNames, lvarNames, expr)
 
 	if dest.KindEq("str") {
 		if 0 <= lvarNames.IndexOf(dest.Strval) {
@@ -227,24 +227,24 @@ func codegenSet(
 	}
 }
 
-func codegenReturn(
+func genReturn(
 	lvarNames *lib.Names,
 	stmtRest *lib.NodeList,
 ) {
 	retval := head(stmtRest)
-	codegenExpr(lib.Names_empty(), lvarNames, retval)
+	genExpr(lib.Names_empty(), lvarNames, retval)
 }
 
-func codegenVmComment(cmt string) {
+func genVmComment(cmt string) {
 	fmt.Printf("  _cmt %s\n", strings.Replace(cmt, " ", "~", -1))
 }
 
-func codegenWhile(
+func genWhile(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	stmtRest *lib.NodeList,
 ) {
-	puts_fn("codegenWhile")
+	puts_fn("genWhile")
 
 	condExpr := stmtRest.Get(0)
 	body := stmtRest.Get(1).List
@@ -258,7 +258,7 @@ func codegenWhile(
 
 	fmt.Printf("label %s\n", labelBegin)
 
-	codegenExpr(fnArgNames, lvarNames, condExpr)
+	genExpr(fnArgNames, lvarNames, condExpr)
 
 	fmt.Printf("  cp 1 reg_b\n")
 	fmt.Printf("  compare\n")
@@ -267,7 +267,7 @@ func codegenWhile(
 	fmt.Printf("  jump %s\n", labelEnd)
 	fmt.Printf("label %s\n", labelTrue)
 
-	codegenStmts(fnArgNames, lvarNames, body)
+	genStmts(fnArgNames, lvarNames, body)
 
 	fmt.Printf("  jump %s\n", labelBegin)
 
@@ -275,12 +275,12 @@ func codegenWhile(
 	fmt.Printf("\n")
 }
 
-func codegenCase(
+func genCase(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	whenClauses *lib.NodeList,
 ) {
-	puts_fn("codegenCase")
+	puts_fn("genCase")
 
 	labelId := getLabelId()
 	whenIdx := -1
@@ -302,7 +302,7 @@ func codegenCase(
 		fmt.Printf("  # when_%d_%d\n", labelId, whenIdx)
 
 		fmt.Printf("  # -->> expr\n")
-		codegenExpr(fnArgNames, lvarNames, cond)
+		genExpr(fnArgNames, lvarNames, cond)
 		fmt.Printf("  # <<-- expr\n")
 
 		fmt.Printf("  cp 1 reg_b\n")
@@ -313,7 +313,7 @@ func codegenCase(
 
 		fmt.Printf("label %s_%d\n", labelWhenHead, whenIdx)
 
-		codegenStmts(fnArgNames, lvarNames, _rest)
+		genStmts(fnArgNames, lvarNames, _rest)
 
 		fmt.Printf("  jump %s\n", labelEnd)
 		fmt.Printf("label %s_%d\n", labelEndWhenHead, whenIdx)
@@ -324,48 +324,48 @@ func codegenCase(
 	fmt.Printf("\n")
 }
 
-func codegenStmt(
+func genStmt(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	stmt *lib.NodeList,
 ) {
-	puts_fn("codegenStmt")
+	puts_fn("genStmt")
 
 	stmtHead := head(stmt).Strval
 	stmtRest := rest(stmt)
 
 	if stmtHead == "set" {
-		codegenSet(fnArgNames, lvarNames, stmtRest)
+		genSet(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "call" {
-		codegenCall(fnArgNames, lvarNames, stmtRest)
+		genCall(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "call_set" {
-		codegenCallSet(fnArgNames, lvarNames, stmtRest)
+		genCallSet(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "return" {
-		codegenReturn(lvarNames, stmtRest)
+		genReturn(lvarNames, stmtRest)
 	} else if stmtHead == "while" {
-		codegenWhile(fnArgNames, lvarNames, stmtRest)
+		genWhile(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "case" {
-		codegenCase(fnArgNames, lvarNames, stmtRest)
+		genCase(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "_cmt" {
-		codegenVmComment(stmtRest.Get(0).Strval)
+		genVmComment(stmtRest.Get(0).Strval)
 	} else {
 		puts_kv_e("stmtHead", stmtHead)
 		panic("Unsupported statement")
 	}
 }
 
-func codegenStmts(
+func genStmts(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	stmts *lib.NodeList,
 ) {
 	for i := 0; i < stmts.Len(); i++ {
 		stmt := stmts.Get(i).List
-		codegenStmt(fnArgNames, lvarNames, stmt)
+		genStmt(fnArgNames, lvarNames, stmt)
 	}
 }
 
-func codegenFuncDef(topStmt *lib.NodeList) {
+func genFuncDef(topStmt *lib.NodeList) {
 	fnName := topStmt.Get(0).Strval
 	fnArgVals := topStmt.Get(1).List
 	body := topStmt.Get(2).List
@@ -393,9 +393,9 @@ func codegenFuncDef(topStmt *lib.NodeList) {
 		if stmtHead == "var" {
 			varName := stmtRest.Get(0).Strval
 			lvarNames.Add(varName)
-			codegenVar(fnArgNames, lvarNames, stmtRest)
+			genVar(fnArgNames, lvarNames, stmtRest)
 		} else {
-			codegenStmt(fnArgNames, lvarNames, stmt)
+			genStmt(fnArgNames, lvarNames, stmt)
 		}
 	}
 
@@ -406,16 +406,16 @@ func codegenFuncDef(topStmt *lib.NodeList) {
 	fmt.Println(`  ret`)
 }
 
-func codegenTopStmts(topStmts *lib.NodeList) {
+func genTopStmts(topStmts *lib.NodeList) {
 	topStmtsRest := rest(topStmts)
 	for i := 0; i < topStmtsRest.Len(); i++ {
 		topStmt := topStmtsRest.Get(i).List
 		stmtRest := rest(topStmt)
-		codegenFuncDef(stmtRest)
+		genFuncDef(stmtRest)
 	}
 }
 
-func codegenBuiltinSetVram() {
+func genBuiltinSetVram() {
 	fmt.Println("")
 	fmt.Println("label set_vram")
 	fmt.Println("  push bp")
@@ -428,7 +428,7 @@ func codegenBuiltinSetVram() {
 	fmt.Println("  ret")
 }
 
-func codegenBuiltinGetVram() {
+func genBuiltinGetVram() {
 	fmt.Println("")
 	fmt.Println("label get_vram")
 	fmt.Println("  push bp")
@@ -448,10 +448,10 @@ func Codegen() {
 	fmt.Println(`  call main`)
 	fmt.Println(`  exit`)
 
-	codegenTopStmts(tree)
+	genTopStmts(tree)
 
 	fmt.Println("#>builtins")
-	codegenBuiltinSetVram()
-	codegenBuiltinGetVram()
+	genBuiltinSetVram()
+	genBuiltinGetVram()
 	fmt.Println("#<builtins")
 }
