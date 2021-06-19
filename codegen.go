@@ -386,12 +386,8 @@ func codegenCase(
 		cond := head(whenBlock)
 		_rest := rest(whenBlock)
 
-		condHead := head(cond.List).Strval
-		// condRest := rest(cond)
-
 		fmt.Printf("  # when_%d_%d\n", labelId, whenIdx)
 
-		if condHead == "eq" {
 			fmt.Printf("  # -->> expr\n")
 			codegenExpr(fnArgNames, lvarNames, cond)
 			fmt.Printf("  # <<-- expr\n")
@@ -408,9 +404,6 @@ func codegenCase(
 
 			fmt.Printf("  jump %s\n", labelEnd)
 			fmt.Printf("label %s_%d\n", labelEndWhenHead, whenIdx)
-		} else {
-			panic("not_yet_impl")
-		}
 	}
 
 	fmt.Printf("label end_case_%d\n", labelId)
