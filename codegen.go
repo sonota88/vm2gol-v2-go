@@ -526,9 +526,13 @@ func codegenFuncDef(topStmt *lib.NodeList) {
 
 	lvarNames := lib.Names_new()
 
+	fmt.Println("")
 	fmt.Printf("label %s\n", fnName)
 	fmt.Println(`  push bp`)
 	fmt.Println(`  cp sp bp`)
+
+	fmt.Println("")
+	fmt.Println("  # 関数の処理本体")
 
 	for i := 0; i < body.Len(); i++ {
 		stmt := body.Get(i).List
@@ -543,6 +547,8 @@ func codegenFuncDef(topStmt *lib.NodeList) {
 			codegenStmt(fnArgNames, lvarNames, stmt)
 		}
 	}
+
+	fmt.Println("")
 
 	fmt.Println(`  cp bp sp`)
 	fmt.Println(`  pop bp`)

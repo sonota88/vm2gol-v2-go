@@ -21,8 +21,8 @@ label main
   _cmt call_set~~f1
   call f1
   add_sp 0
-
   cp reg_a [bp:-1]
+
   cp bp sp
   pop bp
   ret

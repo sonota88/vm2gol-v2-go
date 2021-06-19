@@ -10,7 +10,7 @@ label main
   cp 0 [bp:-1]
 
   # -->> case_1
-  # when_1_0: ["eq", "a", 1]
+  # when_1_0
   # -->> expr
   cp [bp:-1] reg_a
   push reg_a
@@ -34,7 +34,7 @@ label when_1_0
   cp 0 [bp:-1]
   jump end_case_1
 label end_when_1_0
-  # when_1_1: ["eq", "a", 0]
+  # when_1_1
   # -->> expr
   cp [bp:-1] reg_a
   push reg_a
