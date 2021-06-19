@@ -293,6 +293,7 @@ func parseExpr() *lib.Node {
 
 	tl := peek(0)
 
+/*
 	if tl.is("sym", "(") {
 		consumeSym("(")
 		exprL := parseExpr()
@@ -309,6 +310,7 @@ func parseExpr() *lib.Node {
 		exprEls.Add(op_r.Get(1))
 		return lib.Node_newList(exprEls)
 	}
+*/
 
 	if tl.kindEq("int") {
 		pos++
@@ -330,6 +332,22 @@ func parseExpr() *lib.Node {
 		pos++
 		s := tl.str
 		exprL := lib.Node_newStr(s)
+
+		op_r := parseExprRight()
+		if op_r.Len() == 0 {
+			return exprL
+		}
+
+		exprEls := newlist()
+		exprEls.Add(op_r.Get(0))
+		exprEls.Add(exprL)
+		exprEls.Add(op_r.Get(1))
+		return lib.Node_newList(exprEls)
+
+	} else if tl.kindEq("sym") {
+		consumeSym("(")
+		exprL := parseExpr()
+		consumeSym(")")
 
 		op_r := parseExprRight()
 		if op_r.Len() == 0 {
