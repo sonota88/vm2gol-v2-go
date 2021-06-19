@@ -29,12 +29,12 @@ func rest(list *lib.NodeList) *lib.NodeList {
 
 // --------------------------------
 
-func toFnArgRef(names *lib.Names, name string) string {
+func toFnArgDisp(names *lib.Names, name string) int {
 	i := names.IndexOf(name)
 	if i == -1 {
 		panic("fn arg not found")
 	}
-	return fmt.Sprintf("[bp:%d]", i+2)
+	return i + 2
 }
 
 func toLvarRef(names *lib.Names, name string) string {
@@ -156,8 +156,8 @@ func genExpr(
 			cpSrc := toLvarRef(lvarNames, str)
 			fmt.Printf("  cp %s reg_a\n", cpSrc)
 		} else if 0 <= fnArgNames.IndexOf(str) {
-			cpSrc := toFnArgRef(fnArgNames, str)
-			fmt.Printf("  cp %s reg_a\n", cpSrc)
+			disp := toFnArgDisp(fnArgNames, str)
+			fmt.Printf("  cp [bp:%d] reg_a\n", disp)
 		} else {
 			panic("not_yet_impl")
 		}
