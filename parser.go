@@ -256,14 +256,10 @@ func parseVar() *lib.NodeList {
 	}
 }
 
-func parseExprRight(exprL *lib.Node) *lib.Node {
+func parseExprRight() *lib.NodeList {
 	// puts_fn("parseExprRight")
 
 	t := peek(0)
-
-	if t.is("sym", ";") || t.is("sym", ")") {
-		return exprL
-	}
 
 	exprEls := newlist()
 
@@ -271,36 +267,25 @@ func parseExprRight(exprL *lib.Node) *lib.Node {
 		consumeSym("+")
 		exprR := parseExpr()
 		exprEls.AddStr("+")
-		exprEls.Add(exprL)
 		exprEls.Add(exprR)
-
 	} else if t.is("sym", "*") {
 		consumeSym("*")
 		exprR := parseExpr()
 		exprEls.AddStr("*")
-		exprEls.Add(exprL)
 		exprEls.Add(exprR)
-
 	} else if t.is("sym", "==") {
 		consumeSym("==")
 		exprR := parseExpr()
 		exprEls.AddStr("eq")
-		exprEls.Add(exprL)
 		exprEls.Add(exprR)
-
 	} else if t.is("sym", "!=") {
 		consumeSym("!=")
 		exprR := parseExpr()
 		exprEls.AddStr("neq")
-		exprEls.Add(exprL)
 		exprEls.Add(exprR)
-
-	} else {
-		puts_kv_e("t", t)
-		panic("not_yet_impl")
 	}
 
-	return lib.Node_newList(exprEls)
+	return exprEls
 }
 
 func parseExpr() *lib.Node {
@@ -312,20 +297,50 @@ func parseExpr() *lib.Node {
 		consumeSym("(")
 		exprL := parseExpr()
 		consumeSym(")")
-		return parseExprRight(exprL)
+
+		op_r := parseExprRight()
+		if op_r.Len() == 0 {
+			return exprL
+		}
+
+		exprEls := newlist()
+		exprEls.Add(op_r.Get(0))
+		exprEls.Add(exprL)
+		exprEls.Add(op_r.Get(1))
+		return lib.Node_newList(exprEls)
 	}
 
 	if tl.kindEq("int") {
 		pos++
 		n, _ := strconv.Atoi(tl.str)
 		exprL := lib.Node_newInt(n)
-		return parseExprRight(exprL)
+
+		op_r := parseExprRight()
+		if op_r.Len() == 0 {
+			return exprL
+		}
+
+		exprEls := newlist()
+		exprEls.Add(op_r.Get(0))
+		exprEls.Add(exprL)
+		exprEls.Add(op_r.Get(1))
+		return lib.Node_newList(exprEls)
 
 	} else if tl.kindEq("ident") {
 		pos++
 		s := tl.str
 		exprL := lib.Node_newStr(s)
-		return parseExprRight(exprL)
+
+		op_r := parseExprRight()
+		if op_r.Len() == 0 {
+			return exprL
+		}
+
+		exprEls := newlist()
+		exprEls.Add(op_r.Get(0))
+		exprEls.Add(exprL)
+		exprEls.Add(op_r.Get(1))
+		return lib.Node_newList(exprEls)
 
 	} else {
 		panic("not_yet_impl")
