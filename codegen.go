@@ -168,12 +168,14 @@ func codegenExpr(
 	}
 }
 
-func _codegenFuncall(
+func codegenCall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	fnName string,
-	fnArgs *lib.NodeList,
+	funcall *lib.NodeList,
 ) {
+	fnName := head(funcall).Strval
+	fnArgs := rest(funcall)
+
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
 		codegenExpr(fnArgNames, lvarNames, fnArg)
@@ -186,16 +188,6 @@ func _codegenFuncall(
 	fmt.Printf("  add_sp %d\n", fnArgs.Len())
 }
 
-func codegenCall(
-	fnArgNames *lib.Names,
-	lvarNames *lib.Names,
-	funcall *lib.NodeList,
-) {
-	fnName := head(funcall).Strval
-	fnArgs := rest(funcall)
-	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
-}
-
 func codegenCallSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
@@ -206,10 +198,7 @@ func codegenCallSet(
 	lvarName := stmtRest.Get(0).Strval
 	funcall := stmtRest.Get(1).List
 
-	fnName := head(funcall).Strval
-	fnArgs := rest(funcall)
-
-	_codegenFuncall(fnArgNames, lvarNames, fnName, fnArgs)
+	codegenCall(fnArgNames, lvarNames, funcall)
 
 	dest := toLvarRef(lvarNames, lvarName)
 	fmt.Printf("  cp reg_a %s\n", dest)
