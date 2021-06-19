@@ -324,7 +324,7 @@ func codegenWhile(
 
 	codegenExpr(fnArgNames, lvarNames, condExpr)
 
-	fmt.Printf("  set_reg_b 1\n")
+	fmt.Printf("  cp 1 reg_b\n")
 	fmt.Printf("  compare\n")
 
 	fmt.Printf("  jump_eq %s\n", labelTrue)
@@ -369,7 +369,7 @@ func codegenCase(
 		codegenExpr(fnArgNames, lvarNames, cond)
 		fmt.Printf("  # <<-- expr\n")
 
-		fmt.Printf("  set_reg_b 1\n")
+		fmt.Printf("  cp 1 reg_b\n")
 
 		fmt.Printf("  compare\n")
 		fmt.Printf("  jump_eq %s_%d\n", labelWhenHead, whenIdx)
