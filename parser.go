@@ -315,10 +315,13 @@ func parseExpr() *lib.Node {
 		return exprL
 	}
 
+	op := opRight.Get(0)
+	exprR := opRight.Get(1)
+
 	exprEls := newlist()
-	exprEls.Add(opRight.Get(0))
+	exprEls.Add(op)
 	exprEls.Add(exprL)
-	exprEls.Add(opRight.Get(1))
+	exprEls.Add(exprR)
 	return lib.Node_newList(exprEls)
 }
 
