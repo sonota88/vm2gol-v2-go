@@ -333,7 +333,7 @@ func codegenWhile(
 ) {
 	puts_fn("codegenWhile")
 
-	condExpr := stmtRest.Get(0).List
+	condExpr := stmtRest.Get(0)
 	body := stmtRest.Get(1).List
 
 	labelId := getLabelId()
@@ -345,7 +345,7 @@ func codegenWhile(
 
 	fmt.Printf("label %s\n", labelBegin)
 
-	_codegenExprBinop(fnArgNames, lvarNames, condExpr)
+	codegenExpr(fnArgNames, lvarNames, condExpr)
 
 	fmt.Printf("  set_reg_b 1\n")
 	fmt.Printf("  compare\n")
@@ -383,17 +383,17 @@ func codegenCase(
 		whenBlock := whenBlocks.Get(i).List
 		whenIdx++
 
-		cond := head(whenBlock).List
+		cond := head(whenBlock)
 		_rest := rest(whenBlock)
 
-		condHead := head(cond).Strval
+		condHead := head(cond.List).Strval
 		// condRest := rest(cond)
 
 		fmt.Printf("  # when_%d_%d\n", labelId, whenIdx)
 
 		if condHead == "eq" {
 			fmt.Printf("  # -->> expr\n")
-			_codegenExprBinop(fnArgNames, lvarNames, cond)
+			codegenExpr(fnArgNames, lvarNames, cond)
 			fmt.Printf("  # <<-- expr\n")
 
 			fmt.Printf("  set_reg_b 1\n")
