@@ -388,22 +388,22 @@ func codegenCase(
 
 		fmt.Printf("  # when_%d_%d\n", labelId, whenIdx)
 
-			fmt.Printf("  # -->> expr\n")
-			codegenExpr(fnArgNames, lvarNames, cond)
-			fmt.Printf("  # <<-- expr\n")
+		fmt.Printf("  # -->> expr\n")
+		codegenExpr(fnArgNames, lvarNames, cond)
+		fmt.Printf("  # <<-- expr\n")
 
-			fmt.Printf("  set_reg_b 1\n")
+		fmt.Printf("  set_reg_b 1\n")
 
-			fmt.Printf("  compare\n")
-			fmt.Printf("  jump_eq %s_%d\n", labelWhenHead, whenIdx)
-			fmt.Printf("  jump %s_%d\n", labelEndWhenHead, whenIdx)
+		fmt.Printf("  compare\n")
+		fmt.Printf("  jump_eq %s_%d\n", labelWhenHead, whenIdx)
+		fmt.Printf("  jump %s_%d\n", labelEndWhenHead, whenIdx)
 
-			fmt.Printf("label %s_%d\n", labelWhenHead, whenIdx)
+		fmt.Printf("label %s_%d\n", labelWhenHead, whenIdx)
 
-			codegenStmts(fnArgNames, lvarNames, _rest)
+		codegenStmts(fnArgNames, lvarNames, _rest)
 
-			fmt.Printf("  jump %s\n", labelEnd)
-			fmt.Printf("label %s_%d\n", labelEndWhenHead, whenIdx)
+		fmt.Printf("  jump %s\n", labelEnd)
+		fmt.Printf("label %s_%d\n", labelEndWhenHead, whenIdx)
 	}
 
 	fmt.Printf("label end_case_%d\n", labelId)
