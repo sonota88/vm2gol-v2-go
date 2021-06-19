@@ -319,36 +319,7 @@ func codegenReturn(
 	stmtRest *lib.NodeList,
 ) {
 	retval := head(stmtRest)
-
-	argRetval := toAsmArg(lib.Names_empty(), lvarNames, retval)
-	if argRetval != "" {
-		fmt.Printf("  cp %s reg_a\n", argRetval)
-	} else {
-
-		if retval.KindEq("str") {
-			str := retval.Strval
-
-			if vramMatch(str) {
-				vramArg := vramFindSubmatch(str)[1]
-
-				if matchNumber(vramArg) {
-					panic("not_yet_impl")
-				} else {
-
-					vramRef := toAsmArg(lib.Names_empty(), lvarNames, lib.Node_newStr(vramArg))
-					if vramRef != "" {
-						fmt.Printf("  get_vram %s reg_a\n", vramRef)
-					} else {
-						panic("not_yet_impl")
-					}
-				}
-			} else {
-				panic("not_yet_impl")
-			}
-		} else {
-			panic("not_yet_impl")
-		}
-	}
+	codegenExpr(lib.Names_empty(), lvarNames, retval)
 }
 
 func codegenVmComment(cmt string) {
