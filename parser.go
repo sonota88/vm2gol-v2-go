@@ -290,60 +290,36 @@ func parseExprRight() *lib.NodeList {
 
 func parseExpr() *lib.Node {
 	puts_fn("parseExpr")
+	var exprL *lib.Node
 
 	tl := peek(0)
 
 	if tl.kindEq("int") {
 		pos++
 		n, _ := strconv.Atoi(tl.str)
-		exprL := lib.Node_newInt(n)
-
-		op_r := parseExprRight()
-		if op_r.Len() == 0 {
-			return exprL
-		}
-
-		exprEls := newlist()
-		exprEls.Add(op_r.Get(0))
-		exprEls.Add(exprL)
-		exprEls.Add(op_r.Get(1))
-		return lib.Node_newList(exprEls)
-
+		exprL = lib.Node_newInt(n)
 	} else if tl.kindEq("ident") {
 		pos++
 		s := tl.str
-		exprL := lib.Node_newStr(s)
-
-		op_r := parseExprRight()
-		if op_r.Len() == 0 {
-			return exprL
-		}
-
-		exprEls := newlist()
-		exprEls.Add(op_r.Get(0))
-		exprEls.Add(exprL)
-		exprEls.Add(op_r.Get(1))
-		return lib.Node_newList(exprEls)
-
+		exprL = lib.Node_newStr(s)
 	} else if tl.kindEq("sym") {
 		consumeSym("(")
-		exprL := parseExpr()
+		exprL = parseExpr()
 		consumeSym(")")
-
-		op_r := parseExprRight()
-		if op_r.Len() == 0 {
-			return exprL
-		}
-
-		exprEls := newlist()
-		exprEls.Add(op_r.Get(0))
-		exprEls.Add(exprL)
-		exprEls.Add(op_r.Get(1))
-		return lib.Node_newList(exprEls)
-
 	} else {
 		panic("not_yet_impl")
 	}
+
+	op_r := parseExprRight()
+	if op_r.Len() == 0 {
+		return exprL
+	}
+
+	exprEls := newlist()
+	exprEls.Add(op_r.Get(0))
+	exprEls.Add(exprL)
+	exprEls.Add(op_r.Get(1))
+	return lib.Node_newList(exprEls)
 }
 
 func parseSet() *lib.NodeList {
