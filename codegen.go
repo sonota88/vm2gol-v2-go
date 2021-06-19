@@ -279,36 +279,8 @@ func codegenSet(
 	dest := rest.Get(0)
 	expr := rest.Get(1)
 
-	argSrc := toAsmArg(fnArgNames, lvarNames, expr)
-	if argSrc == "" {
-		if expr.KindEq("list") {
-			_codegenExprBinop(fnArgNames, lvarNames, expr.List)
-			argSrc = "reg_a"
-		} else if expr.KindEq("str") {
-
-			if vramMatch(expr.Strval) {
-				vramArg := vramFindSubmatch(expr.Strval)[1]
-
-				if matchNumber(vramArg) {
-					fmt.Printf("  get_vram %s reg_a\n", vramArg)
-				} else {
-					vramRef := toAsmArg(fnArgNames, lvarNames, lib.Node_newStr(vramArg))
-					if vramRef != "" {
-						fmt.Printf("  get_vram %s reg_a\n", vramRef)
-					} else {
-						panic("not_yet_impl")
-					}
-				}
-				argSrc = "reg_a"
-
-			} else {
-				panic("not_yet_impl")
-			}
-		} else {
-			puts_kv_e("expr", expr)
-			panic("not_yet_impl")
-		}
-	}
+	codegenExpr(fnArgNames, lvarNames, expr)
+	argSrc := "reg_a"
 
 	argDest := toAsmArg(fnArgNames, lvarNames, dest)
 	if argDest != "" {
