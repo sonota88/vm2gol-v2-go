@@ -293,25 +293,6 @@ func parseExpr() *lib.Node {
 
 	tl := peek(0)
 
-/*
-	if tl.is("sym", "(") {
-		consumeSym("(")
-		exprL := parseExpr()
-		consumeSym(")")
-
-		op_r := parseExprRight()
-		if op_r.Len() == 0 {
-			return exprL
-		}
-
-		exprEls := newlist()
-		exprEls.Add(op_r.Get(0))
-		exprEls.Add(exprL)
-		exprEls.Add(op_r.Get(1))
-		return lib.Node_newList(exprEls)
-	}
-*/
-
 	if tl.kindEq("int") {
 		pos++
 		n, _ := strconv.Atoi(tl.str)
