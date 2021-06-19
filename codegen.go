@@ -479,6 +479,19 @@ func codegenTopStmts(topStmts *lib.NodeList) {
 	}
 }
 
+func codegenBuiltinSetVram() {
+	fmt.Println("")
+	fmt.Println("label set_vram")
+	fmt.Println("  push bp")
+	fmt.Println("  cp sp bp")
+
+	fmt.Println("  set_vram [bp:2] [bp:3]")
+
+	fmt.Println("  cp bp sp")
+	fmt.Println("  pop bp")
+	fmt.Println("  ret")
+}
+
 func Codegen() {
 	json := lib.ReadStdinAll()
 	tree := lib.ParseJson(json)
@@ -487,4 +500,8 @@ func Codegen() {
 	fmt.Println(`  exit`)
 
 	codegenTopStmts(tree)
+
+    fmt.Println("#>builtins")
+    codegenBuiltinSetVram()
+    fmt.Println("#<builtins")
 }
