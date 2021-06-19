@@ -217,6 +217,17 @@ func codegenExpr(
 ) {
 	if expr.KindEq("int") {
 		fmt.Printf("  cp %d reg_a\n", expr.Intval)
+	} else if expr.KindEq("str") {
+		str := expr.Strval
+		if 0 <= lvarNames.IndexOf(str) {
+			cpSrc := toLvarRef(lvarNames, str)
+			fmt.Printf("  cp %s reg_a\n", cpSrc)
+		} else if 0 <= fnArgNames.IndexOf(str) {
+			cpSrc := toFnArgRef(fnArgNames, str)
+			fmt.Printf("  cp %s reg_a\n", cpSrc)
+		} else {
+			panic("not_yet_impl")
+		}
 	} else if expr.KindEq("list") {
 		_codegenExprBinop(fnArgNames, lvarNames, expr.List)
 	} else {
