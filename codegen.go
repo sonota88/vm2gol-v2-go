@@ -218,8 +218,7 @@ func codegenCallPushFnArg(
 	if pushArg == "" {
 		panic("not yet impl")
 	}
-
-	fmt.Printf("  push %s\n", pushArg)
+	fmt.Printf("  cp %s reg_a\n", pushArg)
 }
 
 func codegenCall(
@@ -233,6 +232,7 @@ func codegenCall(
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
 		codegenCallPushFnArg(fnArgNames, lvarNames, fnArg)
+		fmt.Printf("  push reg_a\n")
 	}
 
 	codegenVmComment("call  " + fnName)
@@ -257,6 +257,7 @@ func codegenCallSet(
 	for i := fnArgs.Len() - 1; i >= 0; i-- {
 		fnArg := fnArgs.Get(i)
 		codegenCallPushFnArg(fnArgNames, lvarNames, fnArg)
+		fmt.Printf("  push reg_a\n")
 	}
 
 	codegenVmComment("call_set  " + fnName)
