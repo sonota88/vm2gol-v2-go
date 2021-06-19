@@ -215,7 +215,9 @@ func codegenExpr(
 	lvarNames *lib.Names,
 	expr *lib.Node,
 ) {
-	if expr.KindEq("list") {
+	if expr.KindEq("int") {
+		fmt.Printf("  cp %d reg_a\n", expr.Intval)
+	} else if expr.KindEq("list") {
 		_codegenExprBinop(fnArgNames, lvarNames, expr.List)
 	} else {
 		panic("not_yet_impl")
