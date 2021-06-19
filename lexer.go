@@ -30,7 +30,7 @@ func tokenize(src string) {
 	strRe := regexp.MustCompile(`^"(.*)"`)
 	symbolRe := regexp.MustCompile(`^(==|!=|[(){}=;+*,])`)
 	intRe := regexp.MustCompile(`^(-?[0-9]+)`)
-	identRe := regexp.MustCompile(`^([a-z_][a-z0-9_\[\]]*)`)
+	identRe := regexp.MustCompile(`^([a-z_][a-z0-9_]*)`)
 
 	for pos < len(src) {
 		rest := src[pos:]

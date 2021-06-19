@@ -196,10 +196,27 @@ test_parse() {
 
 # --------------------------------
 
+test_compile_do_skip() {
+  local nn="$1"; shift
+
+  for skip_nn in 24 25 26 27 28; do
+    if [ "$nn" = "$skip_nn" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 test_compile_nn() {
   local nn="$1"; shift
 
   echo "case ${nn}"
+
+  if (test_compile_do_skip "$nn"); then
+    echo "  ... skip" >&2
+    return
+  fi
 
   local temp_tokens_file="${TEMP_DIR}/test.tokens.txt"
   local temp_vgt_file="${TEMP_DIR}/test.vgt.json"

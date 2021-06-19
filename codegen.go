@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/sonota88/vm2gol-v2-go/lib"
-	"regexp"
 	"strings"
 )
 
@@ -44,23 +43,6 @@ func toLvarRef(names *lib.Names, name string) string {
 		panic("lvar not found")
 	}
 	return fmt.Sprintf("[bp:%d]", -(i + 1))
-}
-
-func getVramRe() *regexp.Regexp {
-	return regexp.MustCompile(`^vram\[(.+?)\]`)
-}
-
-func vramMatch(str string) bool {
-	return getVramRe().MatchString(str)
-}
-
-func vramFindSubmatch(str string) []string {
-	return getVramRe().FindStringSubmatch(str)
-}
-
-func matchNumber(str string) bool {
-	re := regexp.MustCompile(`^[0-9]+$`)
-	return re.MatchString(str)
 }
 
 // --------------------------------
@@ -176,20 +158,6 @@ func codegenExpr(
 		} else if 0 <= fnArgNames.IndexOf(str) {
 			cpSrc := toFnArgRef(fnArgNames, str)
 			fmt.Printf("  cp %s reg_a\n", cpSrc)
-		} else if vramMatch(expr.Strval) {
-			vramArg := vramFindSubmatch(expr.Strval)[1]
-			if matchNumber(vramArg) {
-				fmt.Printf("  get_vram %s reg_a\n", vramArg)
-			} else if 0 <= lvarNames.IndexOf(vramArg) {
-				vramRef := toLvarRef(lvarNames, vramArg)
-				if vramRef != "" {
-					fmt.Printf("  get_vram %s reg_a\n", vramRef)
-				} else {
-					panic("not_yet_impl")
-				}
-			} else {
-				panic("not_yet_impl")
-			}
 		} else {
 			panic("not_yet_impl")
 		}
@@ -257,35 +225,14 @@ func codegenSet(
 	expr := rest.Get(1)
 
 	codegenExpr(fnArgNames, lvarNames, expr)
-	argSrc := "reg_a"
 
 	if dest.KindEq("str") {
-
 		if 0 <= lvarNames.IndexOf(dest.Strval) {
 			cpDest := toLvarRef(lvarNames, dest.Strval)
 			fmt.Printf("  cp reg_a %s\n", cpDest)
-		} else if vramMatch(dest.Strval) {
-			vramArg := vramFindSubmatch(dest.Strval)[1]
-
-			if matchNumber(vramArg) {
-				fmt.Printf("  set_vram %s %s\n", vramArg, argSrc)
-			} else {
-				if 0 <= lvarNames.IndexOf(vramArg) {
-					vramRef := toLvarRef(lvarNames, vramArg)
-					if vramRef != "" {
-						fmt.Printf("  set_vram %s %s\n", vramRef, argSrc)
-					} else {
-						panic("not_yet_impl")
-					}
-				} else {
-					panic("not_yet_impl")
-				}
-			}
-
 		} else {
 			panic("not_yet_impl")
 		}
-
 	} else {
 		panic("not_yet_impl")
 	}
