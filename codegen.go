@@ -492,6 +492,19 @@ func codegenBuiltinSetVram() {
 	fmt.Println("  ret")
 }
 
+func codegenBuiltinGetVram() {
+	fmt.Println("")
+	fmt.Println("label get_vram")
+	fmt.Println("  push bp")
+	fmt.Println("  cp sp bp")
+
+	fmt.Println("  get_vram [bp:2] reg_a") // vram_addr dest
+
+	fmt.Println("  cp bp sp")
+	fmt.Println("  pop bp")
+	fmt.Println("  ret")
+}
+
 func Codegen() {
 	json := lib.ReadStdinAll()
 	tree := lib.ParseJson(json)
@@ -503,5 +516,6 @@ func Codegen() {
 
 	fmt.Println("#>builtins")
 	codegenBuiltinSetVram()
+	codegenBuiltinGetVram()
 	fmt.Println("#<builtins")
 }
