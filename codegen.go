@@ -101,11 +101,11 @@ func codegenExprEq() {
 	fmt.Printf("  compare\n")
 	fmt.Printf("  jump_eq %s\n", thenLabel)
 
-	fmt.Printf("  set_reg_a 0\n")
+	fmt.Printf("  cp 0 reg_a\n")
 	fmt.Printf("  jump %s\n", endLabel)
 
 	fmt.Printf("label %s\n", thenLabel)
-	fmt.Printf("  set_reg_a 1\n")
+	fmt.Printf("  cp 1 reg_a\n")
 	fmt.Printf("label %s\n", endLabel)
 }
 
@@ -121,11 +121,11 @@ func codegenExprNeq() {
 	fmt.Printf("  compare\n")
 	fmt.Printf("  jump_eq %s\n", thenLabel)
 
-	fmt.Printf("  set_reg_a 1\n")
+	fmt.Printf("  cp 1 reg_a\n")
 	fmt.Printf("  jump %s\n", endLabel)
 
 	fmt.Printf("label %s\n", thenLabel)
-	fmt.Printf("  set_reg_a 0\n")
+	fmt.Printf("  cp 0 reg_a\n")
 	fmt.Printf("label %s\n", endLabel)
 }
 
