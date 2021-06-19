@@ -259,36 +259,36 @@ func codegenSet(
 	codegenExpr(fnArgNames, lvarNames, expr)
 	argSrc := "reg_a"
 
-		if dest.KindEq("str") {
+	if dest.KindEq("str") {
 
-			if 0 <= lvarNames.IndexOf(dest.Strval) {
-                cpDest := toLvarRef(lvarNames, dest.Strval)
-                fmt.Printf("  cp reg_a %s\n", cpDest)
-			} else if vramMatch(dest.Strval) {
-				vramArg := vramFindSubmatch(dest.Strval)[1]
+		if 0 <= lvarNames.IndexOf(dest.Strval) {
+			cpDest := toLvarRef(lvarNames, dest.Strval)
+			fmt.Printf("  cp reg_a %s\n", cpDest)
+		} else if vramMatch(dest.Strval) {
+			vramArg := vramFindSubmatch(dest.Strval)[1]
 
-				if matchNumber(vramArg) {
-					fmt.Printf("  set_vram %s %s\n", vramArg, argSrc)
-				} else {
-			        if 0 <= lvarNames.IndexOf(vramArg) {
-                        vramRef := toLvarRef(lvarNames, vramArg)
-                        if vramRef != "" {
-                            fmt.Printf("  set_vram %s %s\n", vramRef, argSrc)
-                        } else {
-                            panic("not_yet_impl")
-                        }
-                    } else {
-	                    panic("not_yet_impl")
-                    }
-				}
-
+			if matchNumber(vramArg) {
+				fmt.Printf("  set_vram %s %s\n", vramArg, argSrc)
 			} else {
-				panic("not_yet_impl")
+				if 0 <= lvarNames.IndexOf(vramArg) {
+					vramRef := toLvarRef(lvarNames, vramArg)
+					if vramRef != "" {
+						fmt.Printf("  set_vram %s %s\n", vramRef, argSrc)
+					} else {
+						panic("not_yet_impl")
+					}
+				} else {
+					panic("not_yet_impl")
+				}
 			}
 
 		} else {
 			panic("not_yet_impl")
 		}
+
+	} else {
+		panic("not_yet_impl")
+	}
 }
 
 func codegenReturn(
