@@ -199,6 +199,20 @@ func codegenExpr(
 		} else if 0 <= fnArgNames.IndexOf(str) {
 			cpSrc := toFnArgRef(fnArgNames, str)
 			fmt.Printf("  cp %s reg_a\n", cpSrc)
+		} else if vramMatch(expr.Strval) {
+			vramArg := vramFindSubmatch(expr.Strval)[1]
+			if matchNumber(vramArg) {
+				fmt.Printf("  get_vram %s reg_a\n", vramArg)
+			} else if 0 <= lvarNames.IndexOf(vramArg) {
+				vramRef := toAsmArg(fnArgNames, lvarNames, lib.Node_newStr(vramArg))
+				if vramRef != "" {
+					fmt.Printf("  get_vram %s reg_a\n", vramRef)
+				} else {
+					panic("not_yet_impl")
+				}
+			} else {
+				panic("not_yet_impl")
+			}
 		} else {
 			panic("not_yet_impl")
 		}
