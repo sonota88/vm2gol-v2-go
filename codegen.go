@@ -46,29 +46,6 @@ func toLvarRef(names *lib.Names, name string) string {
 	return fmt.Sprintf("[bp:%d]", -(i + 1))
 }
 
-func toAsmArg(
-	fnArgNames *lib.Names,
-	lvarNames *lib.Names,
-	node *lib.Node,
-) string {
-	if node.KindEq("int") {
-		return fmt.Sprintf("%d", node.Intval)
-	} else if node.KindEq("str") {
-
-		str := node.Strval
-		if 0 <= lvarNames.IndexOf(str) {
-			return toLvarRef(lvarNames, str)
-		} else if 0 <= fnArgNames.IndexOf(str) {
-			return toFnArgRef(fnArgNames, str)
-		} else {
-			return ""
-		}
-
-	} else {
-		return ""
-	}
-}
-
 func getVramRe() *regexp.Regexp {
 	return regexp.MustCompile(`^vram\[(.+?)\]`)
 }
@@ -204,7 +181,7 @@ func codegenExpr(
 			if matchNumber(vramArg) {
 				fmt.Printf("  get_vram %s reg_a\n", vramArg)
 			} else if 0 <= lvarNames.IndexOf(vramArg) {
-				vramRef := toAsmArg(fnArgNames, lvarNames, lib.Node_newStr(vramArg))
+				vramRef := toLvarRef(lvarNames, vramArg)
 				if vramRef != "" {
 					fmt.Printf("  get_vram %s reg_a\n", vramRef)
 				} else {
@@ -282,26 +259,27 @@ func codegenSet(
 	codegenExpr(fnArgNames, lvarNames, expr)
 	argSrc := "reg_a"
 
-	argDest := toAsmArg(fnArgNames, lvarNames, dest)
-	if argDest != "" {
-		fmt.Printf("  cp %s %s\n", argSrc, argDest)
-	} else {
 		if dest.KindEq("str") {
 
-			if vramMatch(dest.Strval) {
+			if 0 <= lvarNames.IndexOf(dest.Strval) {
+                cpDest := toLvarRef(lvarNames, dest.Strval)
+                fmt.Printf("  cp reg_a %s\n", cpDest)
+			} else if vramMatch(dest.Strval) {
 				vramArg := vramFindSubmatch(dest.Strval)[1]
 
 				if matchNumber(vramArg) {
 					fmt.Printf("  set_vram %s %s\n", vramArg, argSrc)
 				} else {
-
-					vramRef := toAsmArg(fnArgNames, lvarNames, lib.Node_newStr(vramArg))
-					if vramRef != "" {
-						fmt.Printf("  set_vram %s %s\n", vramRef, argSrc)
-					} else {
-						panic("not_yet_impl")
-					}
-
+			        if 0 <= lvarNames.IndexOf(vramArg) {
+                        vramRef := toLvarRef(lvarNames, vramArg)
+                        if vramRef != "" {
+                            fmt.Printf("  set_vram %s %s\n", vramRef, argSrc)
+                        } else {
+                            panic("not_yet_impl")
+                        }
+                    } else {
+	                    panic("not_yet_impl")
+                    }
 				}
 
 			} else {
@@ -311,7 +289,6 @@ func codegenSet(
 		} else {
 			panic("not_yet_impl")
 		}
-	}
 }
 
 func codegenReturn(
