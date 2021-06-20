@@ -225,11 +225,11 @@ func _genSet(
 func genSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	rest *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
 	puts_fn("genSet")
-	dest := rest.Get(0)
-	expr := rest.Get(1)
+	dest := stmt.Get(1)
+	expr := stmt.Get(2)
 
 	if dest.KindEq("str") {
 		_genSet(fnArgNames, lvarNames, dest.Strval, expr)
@@ -350,7 +350,7 @@ func genStmt(
 	stmtRest := rest(stmt)
 
 	if stmtHead == "set" {
-		genSet(fnArgNames, lvarNames, stmtRest)
+		genSet(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "call" {
 		genCall(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "call_set" {
