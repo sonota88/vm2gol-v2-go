@@ -247,7 +247,7 @@ func parseExprRight() *lib.NodeList {
 	} else if t.is("sym", "==") {
 		consumeSym("==")
 		exprR := parseExpr()
-		exprEls.AddStr("eq")
+		exprEls.AddStr("==")
 		exprEls.Add(exprR)
 	} else if t.is("sym", "!=") {
 		consumeSym("!=")

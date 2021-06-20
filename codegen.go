@@ -133,7 +133,7 @@ func _genExprBinop(
 		genExprAdd()
 	} else if op == "*" {
 		genExprMult()
-	} else if op == "eq" {
+	} else if op == "==" {
 		genExprEq()
 	} else if op == "neq" {
 		genExprNeq()
