@@ -249,9 +249,9 @@ func genSet(
 
 func genReturn(
 	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
-	retval := head(stmtRest)
+	retval := stmt.Get(1)
 	genExpr(lib.Names_empty(), lvarNames, retval)
 }
 
@@ -365,7 +365,7 @@ func genStmt(
 	} else if stmtHead == "call_set" {
 		genCallSet(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "return" {
-		genReturn(lvarNames, stmtRest)
+		genReturn(lvarNames, stmt)
 	} else if stmtHead == "while" {
 		genWhile(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "case" {
