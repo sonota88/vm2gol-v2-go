@@ -245,11 +245,11 @@ func parseExprRight() *lib.NodeList {
 	consumeSym(op)
 	exprR := parseExpr()
 
-	exprEls := newlist()
-	exprEls.AddStr(op)
-	exprEls.Add(exprR)
+	opRight := newlist()
+	opRight.AddStr(op)
+	opRight.Add(exprR)
 
-	return exprEls
+	return opRight
 }
 
 func parseExpr() *lib.Node {
