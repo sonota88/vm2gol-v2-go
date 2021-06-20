@@ -232,29 +232,22 @@ func parseExprRight() *lib.NodeList {
 
 	t := peek(0)
 
-	exprEls := newlist()
-
-	if t.is("sym", "+") {
-		consumeSym("+")
-		exprR := parseExpr()
-		exprEls.AddStr("+")
-		exprEls.Add(exprR)
-	} else if t.is("sym", "*") {
-		consumeSym("*")
-		exprR := parseExpr()
-		exprEls.AddStr("*")
-		exprEls.Add(exprR)
-	} else if t.is("sym", "==") {
-		consumeSym("==")
-		exprR := parseExpr()
-		exprEls.AddStr("==")
-		exprEls.Add(exprR)
-	} else if t.is("sym", "!=") {
-		consumeSym("!=")
-		exprR := parseExpr()
-		exprEls.AddStr("!=")
-		exprEls.Add(exprR)
+	if t.is("sym", "+") ||
+		t.is("sym", "*") ||
+		t.is("sym", "==") ||
+		t.is("sym", "!=") {
+		// pass
+	} else {
+		return newlist()
 	}
+
+	op := t.str
+	consumeSym(op)
+	exprR := parseExpr()
+
+	exprEls := newlist()
+	exprEls.AddStr(op)
+	exprEls.Add(exprR)
 
 	return exprEls
 }
