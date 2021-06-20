@@ -47,6 +47,13 @@ func toLvarDisp(names *lib.Names, name string) int {
 
 // --------------------------------
 
+func asmPrologue() {
+	fmt.Println("  push bp")
+	fmt.Println("  cp sp bp")
+}
+
+// --------------------------------
+
 func genExprAdd() {
 	fmt.Printf("  pop reg_b\n")
 	fmt.Printf("  pop reg_a\n")
@@ -379,8 +386,7 @@ func genFuncDef(topStmt *lib.NodeList) {
 
 	fmt.Println("")
 	fmt.Printf("label %s\n", fnName)
-	fmt.Println(`  push bp`)
-	fmt.Println(`  cp sp bp`)
+	asmPrologue()
 
 	fmt.Println("")
 	fmt.Println("  # 関数の処理本体")
@@ -418,8 +424,7 @@ func genTopStmts(topStmts *lib.NodeList) {
 func genBuiltinSetVram() {
 	fmt.Println("")
 	fmt.Println("label set_vram")
-	fmt.Println("  push bp")
-	fmt.Println("  cp sp bp")
+	asmPrologue()
 
 	fmt.Println("  set_vram [bp:2] [bp:3]") // vram_addr value
 
@@ -431,8 +436,7 @@ func genBuiltinSetVram() {
 func genBuiltinGetVram() {
 	fmt.Println("")
 	fmt.Println("label get_vram")
-	fmt.Println("  push bp")
-	fmt.Println("  cp sp bp")
+	asmPrologue()
 
 	fmt.Println("  get_vram [bp:2] reg_a") // vram_addr dest
 
