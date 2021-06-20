@@ -385,12 +385,14 @@ func genStmts(
 func genVar(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
 	fmt.Printf("  sub_sp 1\n")
 
-	if stmtRest.Len() == 2 {
-		genSet(fnArgNames, lvarNames, stmtRest)
+	if stmt.Len() == 3 {
+		varName := stmt.Get(1)
+		expr := stmt.Get(2)
+		_genSet(fnArgNames, lvarNames, varName.Strval, expr)
 	}
 }
 
@@ -416,12 +418,11 @@ func genFuncDef(topStmt *lib.NodeList) {
 	for i := 0; i < body.Len(); i++ {
 		stmt := body.Get(i).List
 		stmtHead := head(stmt).Strval
-		stmtRest := rest(stmt)
 
 		if stmtHead == "var" {
-			varName := stmtRest.Get(0).Strval
+			varName := stmt.Get(1).Strval
 			lvarNames.Add(varName)
-			genVar(fnArgNames, lvarNames, stmtRest)
+			genVar(fnArgNames, lvarNames, stmt)
 		} else {
 			genStmt(fnArgNames, lvarNames, stmt)
 		}
