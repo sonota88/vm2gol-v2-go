@@ -358,7 +358,6 @@ func genStmt(
 	puts_fn("genStmt")
 
 	stmtHead := head(stmt).Strval
-	stmtRest := rest(stmt)
 
 	if stmtHead == "set" {
 		genSet(fnArgNames, lvarNames, stmt)
@@ -373,7 +372,7 @@ func genStmt(
 	} else if stmtHead == "case" {
 		genCase(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "_cmt" {
-		genVmComment(stmtRest.Get(0).Strval)
+		genVmComment(stmt.Get(1).Strval)
 	} else if stmtHead == "_debug" {
 		genDebug()
 	} else {
