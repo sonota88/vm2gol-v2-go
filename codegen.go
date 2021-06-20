@@ -266,12 +266,12 @@ func genDebug() {
 func genWhile(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
 	puts_fn("genWhile")
 
-	condExpr := stmtRest.Get(0)
-	body := stmtRest.Get(1).List
+	condExpr := stmt.Get(1)
+	body := stmt.Get(2).List
 
 	labelId := getLabelId()
 	labelBegin := fmt.Sprintf("while_%d", labelId)
@@ -367,7 +367,7 @@ func genStmt(
 	} else if stmtHead == "return" {
 		genReturn(lvarNames, stmt)
 	} else if stmtHead == "while" {
-		genWhile(fnArgNames, lvarNames, stmtRest)
+		genWhile(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "case" {
 		genCase(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "_cmt" {
