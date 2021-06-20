@@ -19,7 +19,8 @@ func isKw(str string) bool {
 		str == "return" ||
 		str == "case" ||
 		str == "while" ||
-		str == "_cmt"
+		str == "_cmt" ||
+		str == "_debug"
 }
 
 func tokenize(src string) {

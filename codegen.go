@@ -239,6 +239,10 @@ func genVmComment(cmt string) {
 	fmt.Printf("  _cmt %s\n", strings.Replace(cmt, " ", "~", -1))
 }
 
+func genDebug() {
+	fmt.Println("  _debug")
+}
+
 func genWhile(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
@@ -348,6 +352,8 @@ func genStmt(
 		genCase(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "_cmt" {
 		genVmComment(stmtRest.Get(0).Strval)
+	} else if stmtHead == "_debug" {
+		genDebug()
 	} else {
 		puts_kv_e("stmtHead", stmtHead)
 		panic("Unsupported statement")

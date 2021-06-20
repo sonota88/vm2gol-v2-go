@@ -484,6 +484,19 @@ func parseVmComment() *lib.NodeList {
 	return ret
 }
 
+func parseDebug() *lib.NodeList {
+	puts_fn("parseDebug")
+
+	consumeKw("_debug")
+	consumeSym("(")
+	consumeSym(")")
+	consumeSym(";")
+
+	ret := newlist()
+	ret.AddStr("_cmt")
+	return ret
+}
+
 func parseStmt() *lib.NodeList {
 	puts_fn("parseStmt")
 
@@ -507,6 +520,8 @@ func parseStmt() *lib.NodeList {
 		return parseCase()
 	} else if t.strEq("_cmt") {
 		return parseVmComment()
+	} else if t.strEq("_debug") {
+		return parseDebug()
 	} else {
 		puts_kv_e("pos", pos)
 		puts_kv_e("t", t)
