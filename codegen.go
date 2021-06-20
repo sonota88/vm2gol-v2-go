@@ -135,7 +135,7 @@ func _genExprBinop(
 		genExprMult()
 	} else if op == "==" {
 		genExprEq()
-	} else if op == "neq" {
+	} else if op == "!=" {
 		genExprNeq()
 	} else {
 		puts_kv_e("op", op)

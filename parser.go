@@ -252,7 +252,7 @@ func parseExprRight() *lib.NodeList {
 	} else if t.is("sym", "!=") {
 		consumeSym("!=")
 		exprR := parseExpr()
-		exprEls.AddStr("neq")
+		exprEls.AddStr("!=")
 		exprEls.Add(exprR)
 	}
 
