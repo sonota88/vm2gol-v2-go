@@ -47,18 +47,6 @@ func toLvarDisp(names *lib.Names, name string) int {
 
 // --------------------------------
 
-func genVar(
-	fnArgNames *lib.Names,
-	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
-) {
-	fmt.Printf("  sub_sp 1\n")
-
-	if stmtRest.Len() == 2 {
-		genSet(fnArgNames, lvarNames, stmtRest)
-	}
-}
-
 func genExprAdd() {
 	fmt.Printf("  pop reg_b\n")
 	fmt.Printf("  pop reg_a\n")
@@ -362,6 +350,18 @@ func genStmts(
 	for i := 0; i < stmts.Len(); i++ {
 		stmt := stmts.Get(i).List
 		genStmt(fnArgNames, lvarNames, stmt)
+	}
+}
+
+func genVar(
+	fnArgNames *lib.Names,
+	lvarNames *lib.Names,
+	stmtRest *lib.NodeList,
+) {
+	fmt.Printf("  sub_sp 1\n")
+
+	if stmtRest.Len() == 2 {
+		genSet(fnArgNames, lvarNames, stmtRest)
 	}
 }
 
