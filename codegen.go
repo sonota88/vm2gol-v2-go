@@ -168,7 +168,7 @@ func genExpr(
 	}
 }
 
-func genCall(
+func _genFuncall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
 	funcall *lib.NodeList,
@@ -188,6 +188,14 @@ func genCall(
 	fmt.Printf("  add_sp %d\n", fnArgs.Len())
 }
 
+func genCall(
+	fnArgNames *lib.Names,
+	lvarNames *lib.Names,
+	funcall *lib.NodeList,
+) {
+	_genFuncall(fnArgNames, lvarNames, funcall)
+}
+
 func genCallSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
@@ -198,7 +206,7 @@ func genCallSet(
 	lvarName := stmtRest.Get(0).Strval
 	funcall := stmtRest.Get(1).List
 
-	genCall(fnArgNames, lvarNames, funcall)
+	_genFuncall(fnArgNames, lvarNames, funcall)
 
 	disp := toLvarDisp(lvarNames, lvarName)
 	fmt.Printf("  cp reg_a [bp:%d]\n", disp)
