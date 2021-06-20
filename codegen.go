@@ -204,6 +204,24 @@ func genCallSet(
 	fmt.Printf("  cp reg_a [bp:%d]\n", disp)
 }
 
+func _genSet(
+	fnArgNames *lib.Names,
+	lvarNames *lib.Names,
+	varName string,
+	expr *lib.Node,
+) {
+	puts_fn("_genSet")
+
+	genExpr(fnArgNames, lvarNames, expr)
+
+	if 0 <= lvarNames.IndexOf(varName) {
+		disp := toLvarDisp(lvarNames, varName)
+		fmt.Printf("  cp reg_a [bp:%d]\n", disp)
+	} else {
+		panic("not_yet_impl")
+	}
+}
+
 func genSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
@@ -213,15 +231,8 @@ func genSet(
 	dest := rest.Get(0)
 	expr := rest.Get(1)
 
-	genExpr(fnArgNames, lvarNames, expr)
-
 	if dest.KindEq("str") {
-		if 0 <= lvarNames.IndexOf(dest.Strval) {
-			disp := toLvarDisp(lvarNames, dest.Strval)
-			fmt.Printf("  cp reg_a [bp:%d]\n", disp)
-		} else {
-			panic("not_yet_impl")
-		}
+		_genSet(fnArgNames, lvarNames, dest.Strval, expr)
 	} else {
 		panic("not_yet_impl")
 	}
