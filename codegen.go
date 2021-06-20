@@ -52,6 +52,11 @@ func asmPrologue() {
 	fmt.Println("  cp sp bp")
 }
 
+func asmEpilogue() {
+	fmt.Println("  cp bp sp")
+	fmt.Println("  pop bp")
+}
+
 // --------------------------------
 
 func genExprAdd() {
@@ -407,8 +412,7 @@ func genFuncDef(topStmt *lib.NodeList) {
 
 	fmt.Println("")
 
-	fmt.Println(`  cp bp sp`)
-	fmt.Println(`  pop bp`)
+	asmEpilogue()
 	fmt.Println(`  ret`)
 }
 
@@ -428,8 +432,7 @@ func genBuiltinSetVram() {
 
 	fmt.Println("  set_vram [bp:2] [bp:3]") // vram_addr value
 
-	fmt.Println("  cp bp sp")
-	fmt.Println("  pop bp")
+	asmEpilogue()
 	fmt.Println("  ret")
 }
 
@@ -440,8 +443,7 @@ func genBuiltinGetVram() {
 
 	fmt.Println("  get_vram [bp:2] reg_a") // vram_addr dest
 
-	fmt.Println("  cp bp sp")
-	fmt.Println("  pop bp")
+	asmEpilogue()
 	fmt.Println("  ret")
 }
 
