@@ -200,12 +200,12 @@ func genCall(
 func genCallSet(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	stmtRest *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
 	puts_fn("genCallSet")
 
-	lvarName := stmtRest.Get(0).Strval
-	funcall := stmtRest.Get(1).List
+	lvarName := stmt.Get(1).Strval
+	funcall := stmt.Get(2).List
 
 	_genFuncall(fnArgNames, lvarNames, funcall)
 
@@ -363,7 +363,7 @@ func genStmt(
 	} else if stmtHead == "call" {
 		genCall(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "call_set" {
-		genCallSet(fnArgNames, lvarNames, stmtRest)
+		genCallSet(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "return" {
 		genReturn(lvarNames, stmtRest)
 	} else if stmtHead == "while" {
