@@ -302,9 +302,11 @@ func genWhile(
 func genCase(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	whenClauses *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
 	puts_fn("genCase")
+
+	whenClauses := rest(stmt)
 
 	labelId := getLabelId()
 	whenIdx := -1
@@ -369,7 +371,7 @@ func genStmt(
 	} else if stmtHead == "while" {
 		genWhile(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "case" {
-		genCase(fnArgNames, lvarNames, stmtRest)
+		genCase(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "_cmt" {
 		genVmComment(stmtRest.Get(0).Strval)
 	} else if stmtHead == "_debug" {
