@@ -191,8 +191,9 @@ func _genFuncall(
 func genCall(
 	fnArgNames *lib.Names,
 	lvarNames *lib.Names,
-	funcall *lib.NodeList,
+	stmt *lib.NodeList,
 ) {
+	funcall := rest(stmt)
 	_genFuncall(fnArgNames, lvarNames, funcall)
 }
 
@@ -360,7 +361,7 @@ func genStmt(
 	if stmtHead == "set" {
 		genSet(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "call" {
-		genCall(fnArgNames, lvarNames, stmtRest)
+		genCall(fnArgNames, lvarNames, stmt)
 	} else if stmtHead == "call_set" {
 		genCallSet(fnArgNames, lvarNames, stmtRest)
 	} else if stmtHead == "return" {
