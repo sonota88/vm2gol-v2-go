@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"vm2gol-v2-go/lib"
 	"strings"
+	"vm2gol-v2-go/lib"
 )
 
 var gLabelId = 0

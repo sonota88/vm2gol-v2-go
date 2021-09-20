@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"vm2gol-v2-go/lib"
 	"regexp"
+	"vm2gol-v2-go/lib"
 )
 
 func putsToken(kind string, str string) {

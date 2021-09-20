@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"vm2gol-v2-go/lib"
 	"io"
 	"os"
 	"strconv"
 	"strings"
+	"vm2gol-v2-go/lib"
 )
 
 // --------------------------------

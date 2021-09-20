@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"vm2gol-v2-go/lib"
 	"vm2gol-v2-go/test"
-	"os"
 )
 
 func puts_e(arg interface{}) {
