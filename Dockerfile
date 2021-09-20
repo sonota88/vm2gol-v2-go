@@ -24,7 +24,11 @@ RUN wget https://golang.org/dl/${ARCHIVE_FILE} \
   && tar --directory=/home/${USER} -xzf $ARCHIVE_FILE \
   && rm $ARCHIVE_FILE
 
-ENV PATH /home/${USER}/go/bin:${PATH}
+WORKDIR /home/${USER}
+RUN mv go goroot
+
+ENV GOROOT /home/${USER}/goroot
+ENV PATH ${GOROOT}/bin:${PATH}
 ENV USER ${USER}
 
 RUN mkdir /home/${USER}/work
