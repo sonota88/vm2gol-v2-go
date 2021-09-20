@@ -52,7 +52,7 @@ setup() {
 }
 
 build() {
-  ./docker_run.sh go build -o $EXE_FILE
+  go build -o $EXE_FILE
   if [ $? -ne 0 ]; then
     exit 1
   fi
