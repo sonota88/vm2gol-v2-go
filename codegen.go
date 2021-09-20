@@ -328,11 +328,11 @@ func genCase(
 		genExpr(fnArgNames, lvarNames, cond)
 		fmt.Printf("  # <<-- expr\n")
 
-		fmt.Printf("  cp 1 reg_b\n")
+		fmt.Printf("  cp 0 reg_b\n")
 
 		fmt.Printf("  compare\n")
-		fmt.Printf("  jump_eq %s_%d\n", labelWhenHead, whenIdx)
-		fmt.Printf("  jump %s_%d\n", labelEndWhenHead, whenIdx)
+		fmt.Printf("  jump_eq %s_%d\n", labelEndWhenHead, whenIdx)
+		fmt.Printf("  jump %s_%d\n", labelWhenHead, whenIdx)
 
 		fmt.Printf("label %s_%d\n", labelWhenHead, whenIdx)
 
