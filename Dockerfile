@@ -32,5 +32,7 @@ ENV GOPATH /home/${USER}/go
 ENV PATH ${GOROOT}/bin:${PATH}
 ENV USER ${USER}
 
+RUN go env -w GO111MODULE=on
+
 RUN mkdir /home/${USER}/work
 WORKDIR /home/${USER}/work
