@@ -159,13 +159,8 @@ func parseFunc() *lib.NodeList {
 	consumeSym("{")
 
 	stmts := newlist()
-	for {
-		t := peek(0)
-		if t.str == "}" {
-			break
-		}
-
-		if t.str == "var" {
+	for !peek(0).strEq("}") {
+		if peek(0).str == "var" {
 			stmts.AddList(parseVar())
 		} else {
 			stmts.AddList(parseStmt())
@@ -405,11 +400,6 @@ func parseWhile() *lib.NodeList {
 func parseWhenClause() *lib.NodeList {
 	// puts_fn("parseWhenClause")
 
-	t := peek(0)
-	if t.is("sym", "}") {
-		return lib.NodeList_empty()
-	}
-
 	consumeSym("(")
 	expr := parseExpr()
 	consumeSym(")")
@@ -437,11 +427,8 @@ func parseCase() *lib.NodeList {
 
 	whenClauses := newlist()
 
-	for {
+	for !peek(0).strEq("}") {
 		whenClause := parseWhenClause()
-		if whenClause.Len() == 0 {
-			break
-		}
 		whenClauses.AddList(whenClause)
 	}
 
@@ -495,10 +482,6 @@ func parseStmt() *lib.NodeList {
 
 	t := peek(0)
 
-	if t.is("sym", "}") {
-		return nil
-	}
-
 	if t.strEq("set") {
 		return parseSet()
 	} else if t.strEq("call") {
@@ -525,11 +508,8 @@ func parseStmt() *lib.NodeList {
 func parseStmts() *lib.NodeList {
 	stmts := newlist()
 
-	for !isEnd() {
+	for !peek(0).strEq("}") {
 		stmt := parseStmt()
-		if stmt == nil {
-			break
-		}
 		stmts.AddList(stmt)
 	}
 
@@ -553,11 +533,7 @@ func parseTopStmts() *lib.NodeList {
 	tree := newlist()
 	tree.AddStr("top_stmts")
 
-	for {
-		if isEnd() {
-			break
-		}
-
+	for !isEnd() {
 		tree.AddList(parseTopStmt())
 	}
 
