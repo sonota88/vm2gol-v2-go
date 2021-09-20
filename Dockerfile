@@ -28,6 +28,7 @@ WORKDIR /home/${USER}
 RUN mv go goroot
 
 ENV GOROOT /home/${USER}/goroot
+ENV GOPATH /home/${USER}/go
 ENV PATH ${GOROOT}/bin:${PATH}
 ENV USER ${USER}
 
