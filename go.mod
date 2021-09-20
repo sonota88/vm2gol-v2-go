@@ -1,3 +1,3 @@
-module github.com/sonota88/vm2gol-v2-go
+module vm2gol-v2-go
 
 go 1.17

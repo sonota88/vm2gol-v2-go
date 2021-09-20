@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/sonota88/vm2gol-v2-go/lib"
+	"vm2gol-v2-go/lib"
 	"strings"
 )
 

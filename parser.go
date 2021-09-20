@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/sonota88/vm2gol-v2-go/lib"
+	"vm2gol-v2-go/lib"
 	"io"
 	"os"
 	"strconv"
