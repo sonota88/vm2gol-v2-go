@@ -309,7 +309,6 @@ func genCase(
 	whenIdx := -1
 
 	labelEnd := fmt.Sprintf("end_case_%d", labelId)
-	labelWhenHead := fmt.Sprintf("when_%d", labelId)
 	labelEndWhenHead := fmt.Sprintf("end_when_%d", labelId)
 
 	fmt.Printf("\n")
@@ -332,9 +331,6 @@ func genCase(
 
 		fmt.Printf("  compare\n")
 		fmt.Printf("  jump_eq %s_%d\n", labelEndWhenHead, whenIdx)
-		fmt.Printf("  jump %s_%d\n", labelWhenHead, whenIdx)
-
-		fmt.Printf("label %s_%d\n", labelWhenHead, whenIdx)
 
 		genStmts(fnArgNames, lvarNames, _rest)
 
