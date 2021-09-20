@@ -284,11 +284,11 @@ func genWhile(
 
 	genExpr(fnArgNames, lvarNames, condExpr)
 
-	fmt.Printf("  cp 1 reg_b\n")
+	fmt.Printf("  cp 0 reg_b\n")
 	fmt.Printf("  compare\n")
 
-	fmt.Printf("  jump_eq %s\n", labelTrue)
-	fmt.Printf("  jump %s\n", labelEnd)
+	fmt.Printf("  jump_eq %s\n", labelEnd)
+	fmt.Printf("  jump %s\n", labelTrue)
 	fmt.Printf("label %s\n", labelTrue)
 
 	genStmts(fnArgNames, lvarNames, body)
