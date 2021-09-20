@@ -18,7 +18,7 @@ USER ${USER}
 
 WORKDIR /tmp
 
-ARG ARCHIVE_FILE=go1.16.5.linux-amd64.tar.gz
+ARG ARCHIVE_FILE=go1.17.1.linux-amd64.tar.gz
 
 RUN wget https://golang.org/dl/${ARCHIVE_FILE} \
   && tar --directory=/home/${USER} -xzf $ARCHIVE_FILE \
