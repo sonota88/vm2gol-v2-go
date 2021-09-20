@@ -276,7 +276,6 @@ func genWhile(
 	labelId := getLabelId()
 	labelBegin := fmt.Sprintf("while_%d", labelId)
 	labelEnd := fmt.Sprintf("end_while_%d", labelId)
-	labelTrue := fmt.Sprintf("true_%d", labelId)
 
 	fmt.Printf("\n")
 
@@ -288,8 +287,6 @@ func genWhile(
 	fmt.Printf("  compare\n")
 
 	fmt.Printf("  jump_eq %s\n", labelEnd)
-	fmt.Printf("  jump %s\n", labelTrue)
-	fmt.Printf("label %s\n", labelTrue)
 
 	genStmts(fnArgNames, lvarNames, body)
 
